@@ -1,7 +1,7 @@
 # main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import flags, lighting, ai, websocket
+from app.routers import flags, lighting, ai, websocket, matrix
 
 
 app = FastAPI(title="VROBOTIC ESP32 Smart Car Backend Engine Framework")

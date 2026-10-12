@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.smart_car.schemas import PinMappingIn, HardwareMatrix
 from app.smart_car.powertrain import VRoboticCarController
-from typing import List
+from typing import List, Optional
 
 router = APIRouter(prefix="/api/hardware", tags=["Hardware Matrix Configuration"])
 
@@ -10,7 +10,7 @@ ACTIVE_HARDWARE_MATRIX: Optional[HardwareMatrix] = None
 CURRENT_CAR_CONTROLLER: Optional[VRoboticCarController] = None
 
 @router.post("/config")
-async def save_hardware_matrix(payload: List[PinMappingIn"]):
+async def save_hardware_matrix(payload: List["PinMappingIn"]):
     global ACTIVE_HARDWARE_MATRIX, CURRENT_CAR_CONTROLLER
     
     # 1. Transform raw frontend pydantic payload array into structured dictionary matrix
