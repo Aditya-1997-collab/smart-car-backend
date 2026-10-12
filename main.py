@@ -20,8 +20,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount all external modular routers into the orchestrator pipeline core
 app.include_router(flags.router)
 app.include_router(lighting.router)
 app.include_router(ai.router)
-app.include_router(websocket.router) # Websocket router maps directly under root
+app.include_router(websocket.router)
+app.include_router(matrix.router) 
