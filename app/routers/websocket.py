@@ -1,8 +1,6 @@
 import json
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from app.state import store
-# Import the runtime controller state container to pull dynamic pin mappings
-from app.routers.matrix import CURRENT_CAR_CONTROLLER 
+from app.state.store import store
 
 router = APIRouter(tags=["Ultra Low-Latency Powertrain"])
 
@@ -63,21 +61,26 @@ async def websocket_drive_channel(websocket: WebSocket):
             compiled_commands = []
             try:
                 if user_action == "FORWARD":
-                    compiled_commands = CURRENT_CAR_CONTROLLER.compile_forward(speed=150)
+                    compiled_commands = store.current_car_controller.compile_forward(speed=150)
                 elif user_action == "REVERSE":
-                    compiled_commands = CURRENT_CAR_CONTROLLER.compile_reverse(speed=120)
+                    compiled_commands = store.current_car_controller.compile_reverse(speed=120)
                 elif user_action == "LEFT":
-                    compiled_commands = CURRENT_CAR_CONTROLLER.compile_rotate_left(speed=150)
+                    compiled_commands = store.current_car_controller.compile_rotate_left(speed=150)
                 elif user_action == "RIGHT":
-                    compiled_commands = CURRENT_CAR_CONTROLLER.compile_rotate_right(speed=150)
+                    compiled_commands = store.current_car_controller.compile_rotate_right(speed=150)
                 elif user_action == "STOP":
-                    compiled_commands = CURRENT_CAR_CONTROLLER.compile_brake()
+                    compiled_commands = store.current_car_controller.compile_brake()
 
                 # 4. Command Dispatch Pipeline Execution Placeholder
                 # These are the raw "DW:PIN:VAL" machine strings generated from your frontend mappings
                 for command in compiled_commands:
-                    # Tomorrow this loop will push payloads straight out to EMQX client.publish()
-                    print(f"[MQTT Engine Staging] Topic: car/hardware/execute -> Machine Code: {command}")
+                # 1. PUSH TO THE CLOUD OVER THE AIR
+                    try:
+                        from app.mqtt_client import mqtt_client
+                        mqtt_client.publish("car/hardware/execute", command)
+                    except Exception as mqtt_err:
+                        print(f"⚠️ [MQTT Publish Fail]: {mqtt_err}")
+
 
             except KeyError as config_error:
                 # Fallback if an essential component pin was left completely unmapped
