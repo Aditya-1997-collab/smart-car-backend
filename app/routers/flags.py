@@ -1,12 +1,14 @@
 # app/routers/flags.py
 from fastapi import APIRouter
 from app.models.schemas import FlagUpdateRequest
-from app.state import store
+# FIXED IMPORT SYNTAX: Explicitly target the object inside the app.state module namespace
+from app.state.store import store 
 
 router = APIRouter(prefix="/api/features", tags=["Feature Flags"])
 
-@router.get("/flags") # Triggers prefix evaluation matching: /api/features/flags
+@router.get("/flags") 
 async def get_feature_flags():
+    # Now it cleanly locates the dictionary without confusing it for a file folder
     return store.feature_flags
 
 @router.post("/flags/update")

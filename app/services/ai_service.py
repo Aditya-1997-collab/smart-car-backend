@@ -1,18 +1,14 @@
 # app/services/ai_service.py
 import os
-from huggingface_hub import InferenceClient
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv() 
 
-HF_TOKEN = os.environ.get("HF_TOKEN")
-
-print(HF_TOKEN)
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 # Setup HuggingFace Inference platform referencing Qwen 2.5 Instruct
-if HF_TOKEN:
-    hf_client = InferenceClient(
-        api_key=os.environ["HF_TOKEN"],
-    )
+if GROQ_API_KEY:
+    ai_client = Groq(api_key=GROQ_API_KEY)
 else:
-    hf_client = None
+    ai_client = None

@@ -40,7 +40,7 @@ class VRoboticCarController:
             self.compiler.digital_write(self._get_pin("IN4"), 1),
         ]
 
-    def compile_rotate_left(self, speed: int = 150) -> List[str]:
+    def compile_rotate_right(self, speed: int = 150) -> List[str]:
         return [
             self.compiler.analog_write(self._get_pin("ENA"), speed),
             self.compiler.analog_write(self._get_pin("ENB"), speed),
@@ -50,7 +50,7 @@ class VRoboticCarController:
             self.compiler.digital_write(self._get_pin("IN4"), 0),
         ]
 
-    def compile_rotate_right(self, speed: int = 150) -> List[str]:
+    def compile_rotate_left(self, speed: int = 150) -> List[str]:
         return [
             self.compiler.analog_write(self._get_pin("ENA"), speed),
             self.compiler.analog_write(self._get_pin("ENB"), speed),
@@ -66,10 +66,10 @@ class VRoboticCarController:
         return [
             self.compiler.analog_write(self._get_pin("ENA"), 0),
             self.compiler.analog_write(self._get_pin("ENB"), 0),
-            self.compiler.digital_write(self._get_pin("IN1"), 1),
-            self.compiler.digital_write(self._get_pin("IN2"), 1),
-            self.compiler.digital_write(self._get_pin("IN3"), 1),
-            self.compiler.digital_write(self._get_pin("IN4"), 1),
+            self.compiler.digital_write(self._get_pin("IN1"), 0),
+            self.compiler.digital_write(self._get_pin("IN2"), 0),
+            self.compiler.digital_write(self._get_pin("IN3"), 0),
+            self.compiler.digital_write(self._get_pin("IN4"), 0),
         ]
 
     def trigger_radar_pulse(self) -> str:
